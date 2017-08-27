@@ -67,11 +67,11 @@ class Backend {
     }
   }
 
-  currentUser() {
+  currentUser(reAuth) {
     if (this.user) { return this.user; }
     const stored = this.authStore && this.authStore.retrieve();
     if (stored) {
-      return Promise.resolve(this.implementation.setUser(stored)).then(() => stored);
+      return Promise.resolve(this.implementation.setUser(stored, reAuth)).then(() => stored);
     }
     return Promise.resolve(null);
   }
@@ -80,8 +80,8 @@ class Backend {
     return this.implementation.authComponent();
   }
 
-  authenticate(credentials) {
-    return this.implementation.authenticate(credentials).then((user) => {
+  authenticate(credentials, reAuth) {
+    return this.implementation.authenticate(credentials, reAuth).then((user) => {
       if (this.authStore) { this.authStore.store(user); }
       return user;
     });
